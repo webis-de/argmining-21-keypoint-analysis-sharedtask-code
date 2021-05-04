@@ -1,0 +1,34 @@
+### Data: 
+- ArgKP dataset contains 24k pairs of (key-point, argument), on 28 topics, part of ArgQ-Rank-30k dataset that contains 30k arguments on 71 topics.
+
+---------------
+### Track-1 - Key-point Matching:
+- https://arxiv.org/pdf/2010.05369.pdf
+
+- **Task**: Given a set of key-points and arguments, compute for each key-points the matching arguments.
+
+- **Baselines**:
+	- ALBERT (some version of BERT) with F1-score 0.809 and a selection policy BM+TH (Best match and threshold)
+- **Errors**:
+	+ Sharing some key-phrases but the meaning is different	
+	+ Sharing large portion of the sentence but not the main point
+	+ They are at least partially related, but labeled as non matching due to a better fitting key point for the same argument.
+	+ Implicit relation that requires general knowledge to uncover.
+
+- **Ideas**:
+	+ Siamese NN (https://arxiv.org/pdf/1908.10084.pdf)
+	+ LTR with BERT
+	+ Incorporating general knowledge
+
+--------------
+### Track-2 - key-point Analysis:
+- https://www.aclweb.org/anthology/2020.acl-main.371.pdf
+- **Task**: Given a collection of arguments, generate a set of salient key-points that represent the collection and the matching arguments.
+
+- **Baseline idea**: 
+	1. Extract a set of candidate key-points: short sentences, don't start with pronouns, and highest quality score.
+	2. Score their salience based on how much arguments they match (Track-1)
+	3. Select the most salient ones to be the key-points.
+- **Ideas**:
+	+ Represent key-points as a graph problem, with page-rank
+	+ ...
