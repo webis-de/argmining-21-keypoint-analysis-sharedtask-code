@@ -18,3 +18,8 @@ The provided validation set is split into validation and test sets internally.
 | Triplet NN      	| 0.8705698906033249 	| 0.9312265403671426 	|
 | Entailment ANLI 	| |  	|
 | Paraphrase detection 	|  	|  	|
+
+
+### Meeting notes 18.05
+- Split evaluation script into (argument, single keypoint), (argument, multiple keypoints), (argument, no keypoint)
+  
