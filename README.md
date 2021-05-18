@@ -15,6 +15,6 @@ The provided validation set is split into validation and test sets internally.
 
 | Experiment      	| mAP Strict         	| mAP Relaxed        	|
 |-----------------	|--------------------	|--------------------	|
-| Triplet NN      	|  	|  	|
+| Triplet NN      	| 0.8705698906033249 	| 0.9312265403671426 	|
 | Entailment ANLI 	| |  	|
 | Paraphrase detection 	|  	|  	|
