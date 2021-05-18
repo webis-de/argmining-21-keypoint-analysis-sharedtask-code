@@ -1,4 +1,4 @@
-### Trials
+### Trials on our valid
 
 | Experiment      	| mAP Strict         	| mAP Relaxed        	|
 |-----------------	|--------------------	|--------------------	|
