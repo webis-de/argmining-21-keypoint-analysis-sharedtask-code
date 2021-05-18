@@ -22,4 +22,4 @@ The provided validation set is split into validation and test sets internally.
 
 ### Meeting notes 18.05
 - Split evaluation script into (argument, single keypoint), (argument, multiple keypoints), (argument, no keypoint)
-  
+- Data augmentation for paraphrasing and to test other approaches
