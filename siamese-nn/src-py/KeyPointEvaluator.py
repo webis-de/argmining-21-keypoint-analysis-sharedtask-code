@@ -195,11 +195,5 @@ class KeyPointEvaluator(SentenceEvaluator):
                     writer = csv.writer(f)
                     writer.writerow([epoch, steps, mAP_relaxed, mAP_strict])
 
-        if self.main_distance_function == SimilarityFunction.COSINE:
-            return accuracy_cos
-        if self.main_distance_function == SimilarityFunction.MANHATTAN:
-            return accuracy_manhatten
-        if self.main_distance_function == SimilarityFunction.EUCLIDEAN:
-            return accuracy_euclidean
 
         return mAP_strict
