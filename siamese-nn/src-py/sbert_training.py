@@ -11,6 +11,7 @@ from datetime import datetime
 from zipfile import ZipFile
 
 from sentence_transformers.datasets import SentenceLabelDataset
+from sentence_transformers.datasets import NoDuplicatesDataLoader
 
 import csv
 import logging
@@ -122,7 +123,8 @@ def train_hard_triplet_modle(dataset_path, output_path, model_name, training_los
     )
 
 
-def train_model(dataset_path, eval_data_path, subset_name, output_path, model_name, num_epochs=3, train_batch_size=16, model_suffix='', data_file_suffix='', max_seq_length=256, add_special_token=False):
+def train_model(dataset_path, eval_data_path, subset_name, output_path, model_name, num_epochs=3, train_batch_size=16, model_suffix='', data_file_suffix='', max_seq_length=256, 
+                add_special_token=False, loss='Triplet'):
     ### Configure sentence transformers for training and train on the provided dataset
     # Use Huggingface/transformers model (like BERT, RoBERTa, XLNet, XLM-R) for mapping tokens to embeddings
     output_path = output_path+model_name+ "-" + model_suffix + "-"+datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
@@ -152,8 +154,16 @@ def train_model(dataset_path, eval_data_path, subset_name, output_path, model_na
 
 
 
-    train_dataloader = DataLoader(train_examples, shuffle=True, batch_size=train_batch_size)
-    train_loss = losses.TripletLoss(model=model)
+    if loss == 'MultipleNegativesRankingLoss':
+        # Special data loader that avoid duplicates within a batch
+        train_dataloader = NoDuplicatesDataLoader(train_examples, shuffle=False, batch_size=train_batch_size)
+        # Our training loss
+        train_loss = losses.MultipleNegativesRankingLoss(model)
+    
+    else:
+        train_dataloader = DataLoader(train_examples, shuffle=False, batch_size=train_batch_size)
+        train_loss = losses.TripletLoss(model)
+    
 
     evaluator = KeyPointEvaluator.from_eval_data_path(eval_data_path, subset_name, add_special_token, name='dev', show_progress_bar=False)
 
@@ -168,18 +178,3 @@ def train_model(dataset_path, eval_data_path, subset_name, output_path, model_na
               evaluation_steps=500,
               warmup_steps=warmup_steps,
               output_path=output_path)
-
-    
-#     logger.info("Read test examples")
-#     test_examples = []
-#     with open(os.path.join(dataset_path, 'valid_df.csv'), encoding="utf-8") as fIn:
-#         reader = csv.DictReader(fIn, delimiter=',', quoting=csv.QUOTE_MINIMAL)
-#         for row in reader:
-#             test_examples.append(InputExample(texts=[row['argument'], row['pos_kp'], row['neg_kp']]))
-
-
-#     model = SentenceTransformer(output_path)
-#     test_evaluator = TripletEvaluator.from_input_examples(test_examples, name='test')
-#     test_evaluator(model, output_path=output_path)
-
-
