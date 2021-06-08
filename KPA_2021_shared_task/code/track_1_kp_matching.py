@@ -80,7 +80,7 @@ if __name__ == "__main__":
         gold_data_dir = sys.argv[1]
         predictions_file = sys.argv[2]
 
-        arg_df, kp_df, labels_df = load_kpm_data(gold_data_dir, subset="dev")
+        arg_df, kp_df, labels_df = load_kpm_data(gold_data_dir, subset="our_valid")
 
         merged_df = get_predictions(predictions_file, labels_df, arg_df)
         evaluate_predictions(merged_df)
