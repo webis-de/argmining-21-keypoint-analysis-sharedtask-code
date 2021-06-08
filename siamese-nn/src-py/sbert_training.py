@@ -150,7 +150,10 @@ def train_model(dataset_path, eval_data_path, subset_name, output_path, model_na
     with open(os.path.join(dataset_path, 'training_df_{}.csv'.format(data_file_suffix)), encoding="utf-8") as fIn:
         reader = csv.DictReader(fIn, delimiter=',', quoting=csv.QUOTE_MINIMAL)
         for row in reader:
-            train_examples.append(InputExample(texts=[row['anchor'], row['pos'], row['neg']], label=0))
+            if loss == 'ContrastiveLoss':
+                train_examples.append(InputExample(texts=[row['argument'], row['keypoint']], label=int(row['label'])))
+            else:
+                train_examples.append(InputExample(texts=[row['anchor'], row['pos'], row['neg']], label=0))
 
 
 
@@ -159,7 +162,9 @@ def train_model(dataset_path, eval_data_path, subset_name, output_path, model_na
         train_dataloader = NoDuplicatesDataLoader(train_examples, shuffle=False, batch_size=train_batch_size)
         # Our training loss
         train_loss = losses.MultipleNegativesRankingLoss(model)
-    
+    elif loss == 'ContrastiveLoss':
+        train_dataloader = DataLoader(train_examples, shuffle=False, batch_size=train_batch_size)
+        train_loss = losses.ContrastiveLoss(model)
     else:
         train_dataloader = DataLoader(train_examples, shuffle=False, batch_size=train_batch_size)
         train_loss = losses.TripletLoss(model)
