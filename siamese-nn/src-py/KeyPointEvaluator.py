@@ -33,7 +33,7 @@ def calc_mean_average_precision(df, label_column):
 def evaluate_predictions(merged_df):
     mAP_strict = calc_mean_average_precision(merged_df, "label_strict")
     mAP_relaxed = calc_mean_average_precision(merged_df, "label_relaxed")
-    print(f"mAP strict= {mAP_strict} ; mAP relaxed = {mAP_relaxed}")
+    return mAP_strict, mAP_relaxed
 
 def load_kpm_data(gold_data_dir, subset):
     arguments_file = os.path.join(gold_data_dir, f"arguments_{subset}.csv")

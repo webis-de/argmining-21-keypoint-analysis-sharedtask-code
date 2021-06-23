@@ -124,17 +124,26 @@ def train_hard_triplet_modle(dataset_path, output_path, model_name, training_los
 
 
 def train_model(dataset_path, eval_data_path, subset_name, output_path, model_name, num_epochs=3, train_batch_size=16, model_suffix='', data_file_suffix='', max_seq_length=256, 
-                add_special_token=False, loss='Triplet'):
+                add_special_token=False, loss='Triplet', sentence_transformer=False):
     ### Configure sentence transformers for training and train on the provided dataset
     # Use Huggingface/transformers model (like BERT, RoBERTa, XLNet, XLM-R) for mapping tokens to embeddings
     output_path = output_path+model_name+ "-" + model_suffix + "-"+datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
 
-    word_embedding_model = models.Transformer(model_name)
-    word_embedding_model.max_seq_length = max_seq_length
+    if sentence_transformer:
+        word_embedding_model = SentenceTransformer(model_name)
+        word_embedding_model.max_seq_length = max_seq_length
+        
+        if add_special_token:
+            word_embedding_model.tokenizer.add_tokens(['<SEP>'], special_tokens=True)
+            word_embedding_model.resize_token_embeddings(len(word_embedding_model.tokenizer))
+
+    else:
+        word_embedding_model = models.Transformer(model_name)
+        word_embedding_model.max_seq_length = max_seq_length
     
-    if add_special_token:
-        word_embedding_model.tokenizer.add_tokens(['<SEP>'], special_tokens=True)
-        word_embedding_model.auto_model.resize_token_embeddings(len(word_embedding_model.tokenizer))
+        if add_special_token:
+            word_embedding_model.tokenizer.add_tokens(['<SEP>'], special_tokens=True)
+            word_embedding_model.auto_model.resize_token_embeddings(len(word_embedding_model.tokenizer))
 
     # Apply mean pooling to get one fixed sized sentence vector
     pooling_model = models.Pooling(word_embedding_model.get_word_embedding_dimension(),
