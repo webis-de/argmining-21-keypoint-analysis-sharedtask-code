@@ -11,8 +11,8 @@ from Utils import UserLabelCluster
 
 # hyperparameters
 max_length_of_keypoint = 100
-max_number_of_keypoints = 7
-threshold_bert_similarity = .625
+max_number_of_keypoints = 5
+threshold_bert_similarity = .65
 
 
 if __name__ == '__main__':
@@ -64,7 +64,7 @@ if __name__ == '__main__':
                             print("\"{}\" and \"{}\" are similar - discard the second one".format(keypoint[0], candidates[cand][0]))
                             to_remove.append(candidates[cand] if cand > keypoint_index else keypoint)
                     for r in to_remove:
-                        if len(candidates) > 5:
+                        if len(candidates) > 3:
                             candidates.remove(r)
                         else:
                             print("\"{}\" can't be removed since there are only 5 keypoints left "
