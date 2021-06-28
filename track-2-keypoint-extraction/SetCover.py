@@ -11,8 +11,8 @@ from Utils import UserLabelCluster
 
 # hyperparameters
 max_length_of_keypoint = 100
-max_number_of_keypoints = 10
-threshold_bert_similarity = .6
+max_number_of_keypoints = 7
+threshold_bert_similarity = .625
 
 
 if __name__ == '__main__':
@@ -77,7 +77,7 @@ if __name__ == '__main__':
                   )
 
             final_topic_stance_keypoint_dict[(topic, stance)] = \
-                [re.sub(string=cand[0].trim(" \""), pattern="^[Ii]n my (personal)? opinion,\s*", repl="")
+                [re.sub(string=cand[0].strip(" \""), pattern="^[Ii]n my (personal)? opinion,\s*", repl="")
                  for cand in candidates]
 
 
